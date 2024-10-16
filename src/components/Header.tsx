@@ -2,11 +2,11 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { UserButton, useAuth } from '@clerk/nextjs';
+import { ClerkLoaded, ClerkLoading, UserButton, useAuth } from '@clerk/nextjs';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const Header = () => {
-    const { isLoaded, userId } = useAuth();
+    const { userId } = useAuth();
 
     return (
         <div className="border-b border-zinc-100 flex items-center sticky top-0 z-10 bg-white h-14">
@@ -14,15 +14,18 @@ const Header = () => {
                 <Link href="/">
                     <h2 className="text-2xl font-bold">Expense Tracker</h2>
                 </Link>
-                {!isLoaded ? (
+                <ClerkLoading>
                     <Skeleton className="h-8 w-20" />
-                ) : userId ? (
-                    <UserButton />
-                ) : (
-                    <Link href="/sign-up">
-                        <Button>Sign In</Button>
-                    </Link>
-                )}
+                </ClerkLoading>
+                <ClerkLoaded>
+                    {userId ? (
+                        <UserButton />
+                    ) : (
+                        <Link href="/sign-up">
+                            <Button>Sign In</Button>
+                        </Link>
+                    )}
+                </ClerkLoaded>
             </div>
         </div>
     );

@@ -2,33 +2,43 @@
 
 import { z } from 'zod';
 import { formSchema } from '@/app/tracker/personal/Form';
-import { auth } from '@clerk/nextjs/server';
 import { db } from '@/db';
 import { personalExpenses } from '@/db/schema';
 import { desc, eq, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { createUserContext } from './auth';
+import { NeonDbError } from '@neondatabase/serverless';
+import { AuthError } from '@/lib/error';
 
 export async function addPersonalExpense(values: z.infer<typeof formSchema>) {
-    const { userId } = auth();
-    if (!userId) {
-        throw new Error('User not found');
-    }
-    await db.insert(personalExpenses).values({
-        userId,
-        category: values.category,
-        amount: Number(values.amount),
-        note: values.note,
-        date: values.date.toISOString(),
-    });
+    try {
+        const { userId } = createUserContext();
 
-    revalidatePath('/tracker/personal');
+        await db.insert(personalExpenses).values({
+            userId,
+            category: values.category,
+            amount: Number(values.amount),
+            note: values.note,
+            date: values.date.toISOString(),
+        });
+
+        revalidatePath('/tracker/personal');
+    } catch (error) {
+        if (error instanceof AuthError) {
+            throw new Error(`Auth Error: ${error.message}`);
+        } else if (error instanceof NeonDbError) {
+            throw new Error(`Database error: ${error.message}`);
+        } else {
+            throw new Error(
+                'An unexpected error occurred. Please try again later.'
+            );
+        }
+    }
 }
 
 export async function getPersonalExpenses() {
-    const { userId } = auth();
-    if (!userId) {
-        throw new Error('User not found');
-    }
+    const { userId } = createUserContext();
+
     return await db
         .select({
             id: personalExpenses.id,
@@ -43,10 +53,8 @@ export async function getPersonalExpenses() {
 }
 
 export async function getTotalExpenseAndExpensePerCategory() {
-    const { userId } = auth();
-    if (!userId) {
-        throw new Error('User not found');
-    }
+    const { userId } = createUserContext();
+
     const totalExpense = await db
         .select({
             total: sql<number>`cast(sum(${personalExpenses.amount}) as int)`,
