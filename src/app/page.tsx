@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function Home() {
     return (
@@ -11,7 +12,9 @@ export default function Home() {
                 <p className="text-lg mb-6">
                     Track your expenses effortlessly and efficiently.
                 </p>
-                <Button>Get Started</Button>
+                <Link href={'/tracker/personal'}>
+                    <Button>Get Started</Button>
+                </Link>
             </section>
         </div>
     );

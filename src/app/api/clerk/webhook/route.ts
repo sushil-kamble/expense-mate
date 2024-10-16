@@ -1,3 +1,6 @@
+import { db } from '@/db';
+import { users } from '@/db/schema';
+
 export const POST = async (req: Request) => {
     const { data } = await req.json();
     const firstName = data.first_name;
@@ -6,6 +9,13 @@ export const POST = async (req: Request) => {
     const imageUrl = data.image_url;
     const id = data.id;
 
-    console.log('User created:', { id, firstName, lastName, email, imageUrl });
+    await db.insert(users).values({
+        id,
+        firstName,
+        lastName,
+        email,
+        profileImage: imageUrl,
+    });
+
     return new Response('ok', { status: 200 });
 };
