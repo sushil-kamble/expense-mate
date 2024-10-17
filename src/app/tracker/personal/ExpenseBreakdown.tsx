@@ -1,12 +1,10 @@
-import { PersonalExpenseBreakdown } from '@/lib/types';
+import { getTotalExpenseAndExpensePerCategory } from '@/app/actions/personalExpense';
 import { formatCurrency } from '@/lib/utils';
 import React from 'react';
 
-const ExpenseBreakdown = ({
-    breakdown,
-}: {
-    breakdown: PersonalExpenseBreakdown;
-}) => {
+const ExpenseBreakdown = async () => {
+    const breakdown = await getTotalExpenseAndExpensePerCategory();
+
     return (
         <div>
             <div className="text-lg font-semibold border-b">
