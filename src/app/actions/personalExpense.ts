@@ -49,7 +49,7 @@ export async function getPersonalExpenses() {
         })
         .from(personalExpenses)
         .where(eq(personalExpenses.userId, userId))
-        .orderBy(desc(personalExpenses.date));
+        .orderBy(desc(personalExpenses.createdAt));
 }
 
 export async function getTotalExpenseAndExpensePerCategory() {
