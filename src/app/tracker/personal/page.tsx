@@ -12,11 +12,11 @@ const PersonalExpense = async () => {
     const getBreakdown = await getTotalExpenseAndExpensePerCategory();
     return (
         <div>
-            <div className="grid grid-cols-1 md:grid-cols-2">
-                <div className="p-4 pl-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 mx-4 md:mx-0 gap-y-8 md:gap-y-0">
+                <div className="md:pb-4 md:pr-4 pl-0">
                     <Form />
                 </div>
-                <div className="p-4 pr-0">
+                <div className="md:pb-4 md:pl-4 pr-0">
                     <ExpenseBreakdown breakdown={getBreakdown} />
                 </div>
                 <div className="md:col-span-2 border-t py-4">

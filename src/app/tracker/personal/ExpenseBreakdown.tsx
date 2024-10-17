@@ -20,7 +20,7 @@ const ExpenseBreakdown = ({
                     </div>
                 </div>
                 <div className="mt-2">
-                    <div className="text-lg border-b"> Categories</div>
+                    <div className="text-base border-b"> Categories</div>
                     <div className="flex flex-col gap-2 mt-2">
                         {breakdown.expensePerCategory.map((category) => (
                             <div
