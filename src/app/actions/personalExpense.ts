@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { formSchema } from '@/app/tracker/personal/Form';
+import { formSchema } from '@/app/project/personal-expenses/Form';
 import { db } from '@/db';
 import { personalExpensesTransactions } from '@/db/schema/personalExpense';
 import { desc, eq, sql } from 'drizzle-orm';

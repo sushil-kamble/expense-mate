@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { ROUTES } from '@/lib/routes';
 
 export default function Home() {
     return (
@@ -12,7 +13,7 @@ export default function Home() {
                 <p className="text-lg mb-6">
                     Track your expenses effortlessly and efficiently.
                 </p>
-                <Link href={'/tracker/personal'}>
+                <Link href={ROUTES.PROJECT.PERSONAL_EXPENSES}>
                     <Button>Get Started</Button>
                 </Link>
             </section>
