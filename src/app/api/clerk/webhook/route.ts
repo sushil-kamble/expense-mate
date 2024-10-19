@@ -1,5 +1,5 @@
 import { db } from '@/db';
-import { users } from '@/db/schema';
+import { users } from '@/db/schema/users';
 
 export const POST = async (req: Request) => {
     const { data } = await req.json();

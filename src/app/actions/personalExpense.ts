@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { formSchema } from '@/app/tracker/personal/Form';
 import { db } from '@/db';
-import { personalExpenses } from '@/db/schema';
+import { personalExpensesTransactions } from '@/db/schema/personalExpense';
 import { desc, eq, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { createUserContext } from './auth';
@@ -14,7 +14,7 @@ export async function addPersonalExpense(values: z.infer<typeof formSchema>) {
     try {
         const { userId } = createUserContext();
 
-        await db.insert(personalExpenses).values({
+        await db.insert(personalExpensesTransactions).values({
             userId,
             category: values.category,
             amount: Number(values.amount),
@@ -41,15 +41,15 @@ export async function getPersonalExpenses() {
 
     return await db
         .select({
-            id: personalExpenses.id,
-            category: personalExpenses.category,
-            amount: personalExpenses.amount,
-            note: personalExpenses.note,
-            date: personalExpenses.date,
+            id: personalExpensesTransactions.id,
+            category: personalExpensesTransactions.category,
+            amount: personalExpensesTransactions.amount,
+            note: personalExpensesTransactions.note,
+            date: personalExpensesTransactions.date,
         })
-        .from(personalExpenses)
-        .where(eq(personalExpenses.userId, userId))
-        .orderBy(desc(personalExpenses.createdAt));
+        .from(personalExpensesTransactions)
+        .where(eq(personalExpensesTransactions.userId, userId))
+        .orderBy(desc(personalExpensesTransactions.createdAt));
 }
 
 export async function getTotalExpenseAndExpensePerCategory() {
@@ -57,19 +57,19 @@ export async function getTotalExpenseAndExpensePerCategory() {
 
     const totalExpense = await db
         .select({
-            total: sql<number>`cast(sum(${personalExpenses.amount}) as int)`,
+            total: sql<number>`cast(sum(${personalExpensesTransactions.amount}) as int)`,
         })
-        .from(personalExpenses)
-        .where(eq(personalExpenses.userId, userId));
+        .from(personalExpensesTransactions)
+        .where(eq(personalExpensesTransactions.userId, userId));
 
     const expensePerCategory = await db
         .select({
-            category: personalExpenses.category,
-            total: sql<number>`cast(sum(${personalExpenses.amount}) as int)`,
+            category: personalExpensesTransactions.category,
+            total: sql<number>`cast(sum(${personalExpensesTransactions.amount}) as int)`,
         })
-        .from(personalExpenses)
-        .where(eq(personalExpenses.userId, userId))
-        .groupBy(personalExpenses.category);
+        .from(personalExpensesTransactions)
+        .where(eq(personalExpensesTransactions.userId, userId))
+        .groupBy(personalExpensesTransactions.category);
 
     return { total: totalExpense[0].total, expensePerCategory };
 }

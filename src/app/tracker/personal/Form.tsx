@@ -40,8 +40,8 @@ export const formSchema = z.object({
         }),
     note: z
         .string()
-        .min(2, { message: 'Note must be at least 2 characters.' })
-        .max(50, { message: 'Note cannot exceed 50 characters.' }),
+        .max(50, { message: 'Note cannot exceed 50 characters.' })
+        .optional(),
     date: z.date(),
 });
 
