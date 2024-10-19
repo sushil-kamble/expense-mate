@@ -1,19 +1,21 @@
-import { getTotalExpenseAndExpensePerCategory } from '@/app/actions/personalExpense';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { PersonalExpenseBreakdown } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
-import React from 'react';
 
-const ExpenseBreakdown = async () => {
-    const breakdown = await getTotalExpenseAndExpensePerCategory();
-
+const NumbersBreakdown = ({
+    breakdown,
+}: {
+    breakdown: PersonalExpenseBreakdown;
+}) => {
     return (
-        <div>
-            <div className="text-lg font-semibold border-b">
-                Expense Breakdown
-            </div>
-            <div className="mt-4">
+        <Card className="flex flex-col">
+            <CardHeader className="items-center pb-0">
+                <CardTitle>Expense by category</CardTitle>
+            </CardHeader>
+            <CardContent className="mt-2">
                 <div className="flex justify-between">
-                    <div className="text-lg">Total Expenses</div>
-                    <div className="text-lg font-semibold">
+                    <div className="text-base">Total Expenses</div>
+                    <div className="text-base font-semibold">
                         {formatCurrency(breakdown.total)}
                     </div>
                 </div>
@@ -35,9 +37,9 @@ const ExpenseBreakdown = async () => {
                         ))}
                     </div>
                 </div>
-            </div>
-        </div>
+            </CardContent>
+        </Card>
     );
 };
 
-export default ExpenseBreakdown;
+export default NumbersBreakdown;

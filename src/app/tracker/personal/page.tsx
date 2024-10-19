@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react';
 import Form from './Form';
-import ExpenseBreakdown from './ExpenseBreakdown';
 import ListingWrapper from './ListingWrapper';
 import ExpenseBreakdownLoading from './ExpenseBreakdownLoading';
 import ListingLoading from './ListingLoading';
+import BreakdownWrapper from './BreakdownWrapper';
 
 const PersonalExpense = async () => {
     return (
@@ -14,7 +14,7 @@ const PersonalExpense = async () => {
 
             <div className="md:pb-4 md:pl-4 pr-0">
                 <Suspense fallback={<ExpenseBreakdownLoading />}>
-                    <ExpenseBreakdown />
+                    <BreakdownWrapper />
                 </Suspense>
             </div>
 
