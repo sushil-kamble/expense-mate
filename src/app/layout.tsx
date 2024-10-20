@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Providers from '@/components/Providers';
 import { Viewport } from 'next';
-import AppSidebar from '@/components/AppSidebar';
+import { AppSidebar } from '@/components/app-sidebar';
 import NextTopLoaderWrapper from '@/components/NextTopLoaderWrapper';
 
 export const viewport: Viewport = {
