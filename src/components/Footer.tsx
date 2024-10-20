@@ -1,15 +1,18 @@
-import React from 'react';
+'use client';
 import { Button } from '@/components/ui/button';
 
 const Footer = () => {
+    const handleContactUs = () => {
+        alert('Thanks for contacting us');
+    };
     return (
-        <div className="border-t border-zinc-100 py-3 px-4 md:px-0">
+        <div className="border-t py-3 px-4 md:px-0">
             <div className="container mx-auto flex justify-between items-center">
                 <p className="text-xs md:text-sm">
-                    &copy; {new Date().getFullYear()} Expense Tracker. All
-                    rights reserved. Expense Tracker. All rights reserved.
+                    &copy; {new Date().getFullYear()} Saasy Saas. All rights
+                    reserved. Saasy Saas. All rights reserved.
                 </p>
-                <Button>Contact Us</Button>
+                <Button onClick={handleContactUs}>Contact Us</Button>
             </div>
         </div>
     );

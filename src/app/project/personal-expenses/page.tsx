@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react';
-import Form from './Form';
-import ListingWrapper from './ListingWrapper';
-import ExpenseBreakdownLoading from './ExpenseBreakdownLoading';
-import ListingLoading from './ListingLoading';
-import BreakdownWrapper from './BreakdownWrapper';
+import Form from './_components/Form';
+import ListingWrapper from './_components/ListingWrapper';
+import ExpenseBreakdownLoading from './_components/ExpenseBreakdownLoading';
+import ListingLoading from './_components/ListingLoading';
+import BreakdownWrapper from './_components/BreakdownWrapper';
 
 const PersonalExpense = async () => {
     return (

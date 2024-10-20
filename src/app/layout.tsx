@@ -1,8 +1,31 @@
 import './globals.css';
-import { ClerkProvider } from '@clerk/nextjs';
+import { Noto_Serif, JetBrains_Mono } from 'next/font/google';
 import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Providers from '@/components/Providers';
+import { Viewport } from 'next';
+import AppSidebar from '@/components/AppSidebar';
+import NextTopLoaderWrapper from '@/components/NextTopLoaderWrapper';
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+};
+
+const NotoSerif = Noto_Serif({
+    variable: '--font-sans',
+    subsets: ['latin'],
+    display: 'swap',
+});
+
+const JetBrainsMono = JetBrains_Mono({
+    variable: '--font-mono',
+    subsets: ['latin'],
+    display: 'swap',
+});
 
 export default function RootLayout({
     children,
@@ -10,16 +33,24 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <ClerkProvider>
-            <html lang="en">
-                <body className="flex flex-col min-h-screen antialiased">
-                    <Header />
-                    <main className="grow my-3 container mx-auto">
-                        {children}
+        <html
+            lang="en"
+            suppressHydrationWarning
+            className={`${NotoSerif.variable} ${JetBrainsMono.variable}`}
+        >
+            <body className="antialiased">
+                <Providers>
+                    <AppSidebar />
+                    <main className="flex flex-col min-h-screen w-full">
+                        <Header />
+                        <section className="container mx-auto grow my-3">
+                            <NextTopLoaderWrapper />
+                            {children}
+                        </section>
+                        <Footer />
                     </main>
-                    <Footer />
-                </body>
-            </html>
-        </ClerkProvider>
+                </Providers>
+            </body>
+        </html>
     );
 }
