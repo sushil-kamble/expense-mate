@@ -2,15 +2,12 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ClerkLoaded, ClerkLoading, UserButton, useAuth } from '@clerk/nextjs';
-import { Skeleton } from '@/components/ui/skeleton';
+import { ClerkLoaded, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import ThemeSwitcher from './ThemeSwitcher';
 import { LayersIcon } from '@radix-ui/react-icons';
 import { SidebarTrigger } from './ui/sidebar';
 
 const Header = () => {
-    const { userId } = useAuth();
-
     return (
         <div className="border-b flex items-center sticky top-0 z-10 h-16 px-4 md:px-0">
             <div className="flex justify-between items-center w-full ml-2 mr-6">
@@ -28,17 +25,15 @@ const Header = () => {
                 </div>
                 <div className="flex gap-4 items-center">
                     <ThemeSwitcher />
-                    <ClerkLoading>
-                        <Skeleton className="h-8 w-20" />
-                    </ClerkLoading>
                     <ClerkLoaded>
-                        {userId ? (
+                        <SignedIn>
                             <UserButton />
-                        ) : (
+                        </SignedIn>
+                        <SignedOut>
                             <Link href="/sign-up">
                                 <Button>Sign In</Button>
                             </Link>
-                        )}
+                        </SignedOut>
                     </ClerkLoaded>
                 </div>
             </div>

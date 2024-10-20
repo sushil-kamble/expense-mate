@@ -1,175 +1,88 @@
-"use client"
+'use client';
 
-import * as React from "react"
+import * as React from 'react';
+import { BanknoteIcon, Home } from 'lucide-react';
+
+import NavGroup from '@/components/nav-group';
+import { NavUser } from '@/components/nav-user';
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    useSidebar,
+} from '@/components/ui/sidebar';
+import { StackIcon } from '@radix-ui/react-icons';
+import { useUser } from '@clerk/nextjs';
+import { Button } from './ui/button';
+import { motion } from 'framer-motion';
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarRail,
-} from "@/components/ui/sidebar"
-
-// This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+    user: {
+        name: 'Sushil',
+        email: 'm@example.com',
+        avatar: '/avatars/shadcn.jpg',
     },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
+    mainMenu: [
         {
-          title: "History",
-          url: "#",
+            name: 'Home',
+            url: '/',
+            icon: Home,
         },
+    ],
+    projects: [
         {
-          title: "Starred",
-          url: "#",
+            name: 'Personal Expenses',
+            url: '/project/personal-expenses',
+            icon: BanknoteIcon,
         },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-}
+    ],
+};
+
+const variants = {
+    open: { opacity: 1, x: 0 },
+    closed: { opacity: 0, x: -100 },
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
-      </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
-      </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
-      <SidebarRail />
-    </Sidebar>
-  )
+    const { user } = useUser();
+    const { open, setOpen, isMobile } = useSidebar();
+
+    return (
+        <Sidebar collapsible="icon" {...props}>
+            <SidebarHeader className="p-0">
+                <h2 className="pl-4 text-xl inline-flex items-center gap-2 h-16 border-b">
+                    <StackIcon
+                        className="w-8 h-8 cursor-pointer"
+                        onClick={() => setOpen(true)}
+                    />
+                    <motion.span
+                        initial={false}
+                        animate={open ? 'open' : 'closed'}
+                        variants={variants}
+                        transition={{ duration: 0.5 }}
+                    >
+                        {open ? 'Sassy Sass' : ''}
+                    </motion.span>
+                </h2>
+            </SidebarHeader>
+            <SidebarContent>
+                <NavGroup title="Main Menu" group={data.mainMenu} />
+                <NavGroup title="Projects" group={data.projects} />
+            </SidebarContent>
+            <SidebarFooter
+                className={`md:h-16 border-t p-2 ${!open && !isMobile ? 'justify-center self-center' : ''}`}
+            >
+                {user ? (
+                    <NavUser
+                        name={user.fullName ?? 'Guest'}
+                        avatar={user.imageUrl}
+                        email={user.emailAddresses[0].emailAddress}
+                    />
+                ) : (
+                    <Button>Login</Button>
+                )}
+            </SidebarFooter>
+        </Sidebar>
+    );
 }

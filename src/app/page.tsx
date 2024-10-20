@@ -22,10 +22,6 @@ export default function Home() {
                     <li className="mb-2">Integrated database with Prisma</li>
                     <li className="mb-2">Customizable UI components</li>
                     <li className="mb-2">Server-side rendering with Next.js</li>
-                    <li className="mb-2">API routes for backend logic</li>
-                    <li className="mb-2">
-                        Loading spinners and skeleton screens
-                    </li>
                     <li className="mb-2">Responsive design</li>
                 </ul>
             </section>
