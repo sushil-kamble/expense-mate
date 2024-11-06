@@ -51,9 +51,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return (
         <Sidebar collapsible="icon" {...props}>
             <SidebarHeader className="p-0">
-                <h2 className="pl-4 text-xl inline-flex items-center gap-2 h-16 border-b">
+                <h2
+                    className={`text-xl inline-flex items-center h-16 border-b ${open ? 'pl-2 gap-2' : 'justify-center'}`}
+                >
                     <StackIcon
-                        className="w-8 h-8 cursor-pointer"
+                        className="w-6 h-6 cursor-pointer"
                         onClick={() => setOpen(true)}
                     />
                     <motion.span
