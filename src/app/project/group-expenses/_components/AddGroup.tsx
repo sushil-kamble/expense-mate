@@ -18,6 +18,7 @@ function AddGroup() {
     const [members, setMembers] = useState<string[]>(['']);
     const [groupName, setGroupName] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(false);
     const { toast } = useToast();
     const newInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -48,6 +49,8 @@ function AddGroup() {
             color: 'green',
             title: 'Group Added Successfully',
         });
+        reset();
+        setOpen(false);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<SVGElement>) => {
@@ -57,8 +60,13 @@ function AddGroup() {
         }
     };
 
+    const reset = () => {
+        setMembers(['']);
+        setGroupName('');
+    };
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button tabIndex={0}>
                     <PlusIcon size={16} />

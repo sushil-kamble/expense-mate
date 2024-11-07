@@ -44,7 +44,7 @@ export default function RootLayout({
                     <AppSidebar />
                     <main className="flex flex-col min-h-screen w-full">
                         <Header />
-                        <section className="px-1 md:px-4 grow my-3">
+                        <section className="px-1 md:px-4 grow my-2">
                             <NextTopLoaderWrapper />
                             {children}
                         </section>

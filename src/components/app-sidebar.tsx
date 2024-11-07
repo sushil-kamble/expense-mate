@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { BanknoteIcon, Home } from 'lucide-react';
+import { BanknoteIcon, GroupIcon, Home } from 'lucide-react';
 
 import NavGroup from '@/components/nav-group';
 import { NavUser } from '@/components/nav-user';
@@ -35,6 +35,11 @@ const data = {
             name: 'Personal Expenses',
             url: '/project/personal-expenses',
             icon: BanknoteIcon,
+        },
+        {
+            name: 'Group Expenses',
+            url: '/project/group-expenses',
+            icon: GroupIcon,
         },
     ],
 };
