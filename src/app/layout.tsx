@@ -7,6 +7,7 @@ import Providers from '@/components/Providers';
 import { Viewport } from 'next';
 import { AppSidebar } from '@/components/app-sidebar';
 import NextTopLoaderWrapper from '@/components/NextTopLoaderWrapper';
+import { Toaster } from '@/components/ui/toaster';
 
 export const viewport: Viewport = {
     width: 'device-width',
@@ -49,6 +50,7 @@ export default function RootLayout({
                         </section>
                         <Footer />
                     </main>
+                    <Toaster />
                 </Providers>
             </body>
         </html>
