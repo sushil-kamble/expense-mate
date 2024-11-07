@@ -52,7 +52,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <Sidebar collapsible="icon" {...props}>
             <SidebarHeader className="p-0">
                 <h2
-                    className={`text-xl inline-flex items-center h-16 border-b ${open ? 'pl-2 gap-2' : 'justify-center'}`}
+                    className={`text-xl inline-flex items-center h-16 border-b ${open ? 'pl-3 gap-2' : 'justify-center'}`}
                 >
                     <StackIcon
                         className="w-6 h-6 cursor-pointer"
