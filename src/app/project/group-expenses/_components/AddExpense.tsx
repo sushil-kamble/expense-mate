@@ -1,5 +1,5 @@
 'use client';
-import { addExpense, addGroup } from '@/app/actions/groupExpense';
+import { addExpense } from '@/app/actions/groupExpense';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -15,7 +15,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useToast } from '@/hooks/use-toast';
 import { CheckIcon, PlusIcon } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 
 type MembersExpense = {
     id: string;
@@ -25,8 +25,10 @@ type MembersExpense = {
 function AddExpense({
     groupId,
     groupMembers,
+    groupName,
 }: {
     groupId: string;
+    groupName: string;
     groupMembers: { id: string; name: string }[];
 }) {
     const [amount, setAmount] = useState<string>('');
@@ -62,6 +64,7 @@ function AddExpense({
         setLoading(true);
         await addExpense({
             groupId,
+            groupName,
             amount,
             date: new Date(),
             payerId: payer,
@@ -76,14 +79,12 @@ function AddExpense({
         setOpen(false);
     };
 
-    const handleKeyDown = (event: React.KeyboardEvent<SVGElement>) => {
-        if (event.key === ' ') {
-            event.preventDefault();
-        }
-    };
-
     const reset = () => {
-        //
+        setAmount('');
+        setPayer('');
+        setMemberExpenses(
+            groupMembers.map((member) => ({ id: member.id, share: '' }))
+        );
     };
 
     return (
@@ -129,6 +130,7 @@ function AddExpense({
                         >
                             <div className="basis-1/2 flex items-center gap-2">
                                 <RadioGroupItem
+                                    tabIndex={-1}
                                     value={member.id}
                                     id={member.id}
                                 />

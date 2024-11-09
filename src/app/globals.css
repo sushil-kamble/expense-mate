@@ -12,6 +12,13 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 }
 
 @layer base {
@@ -55,6 +62,10 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* CUSTOM COLORS */
+    --credit: 141.7 76.6% 73.1%;
+    --debit: 0 93.5% 81.8%;
   }
 
   .dark {
@@ -95,6 +106,10 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* CUSTOM COLORS */
+    --credit: 142.4 71.8% 29.2%;
+    --debit: 0 73.7% 41.8%;
   }
 }
 

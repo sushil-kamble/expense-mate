@@ -13,3 +13,23 @@ export type PersonalExpenseBreakdown = {
         total: number;
     }[];
 };
+
+export type GroupTransaction = {
+    date: Date | null;
+    id: string;
+    payerId: string;
+    amount: string;
+    note: string | null;
+    members: {
+        id: string;
+        amount: string;
+        member: {
+            id: string;
+            name: string;
+        };
+    }[];
+    payer: {
+        id: string;
+        name: string;
+    };
+};

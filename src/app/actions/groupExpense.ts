@@ -59,6 +59,7 @@ type MembersExpense = {
 
 export const addExpense = async ({
     groupId,
+    groupName,
     payerId,
     amount,
     note,
@@ -66,6 +67,7 @@ export const addExpense = async ({
     members,
 }: {
     groupId: string;
+    groupName: string;
     payerId: string;
     amount: string;
     note?: string;
@@ -90,7 +92,50 @@ export const addExpense = async ({
             amount: member.share,
         }));
         await db.insert(expensesMembers).values(expensesMembersData);
+        revalidatePath(
+            `/project/group-expenses/${encodeURIComponent(groupName)}-$-${groupId}`
+        );
     } catch (error) {
         console.log(error);
     }
+};
+
+export const getGroupTransactions = async ({
+    groupId,
+}: {
+    groupId: string;
+}) => {
+    const transactions = await db.query.expenses.findMany({
+        columns: {
+            id: true,
+            payerId: true,
+            amount: true,
+            note: true,
+            date: true,
+        },
+        with: {
+            members: {
+                columns: {
+                    id: true,
+                    amount: true,
+                },
+                with: {
+                    member: {
+                        columns: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                },
+            },
+            payer: {
+                columns: {
+                    id: true,
+                    name: true,
+                },
+            },
+        },
+        where: (expenses, { eq }) => eq(expenses.groupId, groupId),
+    });
+    return transactions;
 };
