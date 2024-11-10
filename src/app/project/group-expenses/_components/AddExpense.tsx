@@ -29,6 +29,7 @@ interface CalculateShareParams {
     total?: number;
     individual?: { id: string; share: number };
     newMemberExpenses?: MembersExpense[];
+    manualMember?: { id: string; state: boolean }[];
 }
 
 function AddExpense({
@@ -71,7 +72,17 @@ function AddExpense({
             }
             return member;
         });
-        setMemberExpenses((prev) => newMemberExpenses);
+        setMemberExpenses(newMemberExpenses);
+        const manualMember = manualMemberExpenses.map((manual) => {
+            if (manual.id === id) {
+                return {
+                    id,
+                    state: true,
+                };
+            }
+            return manual;
+        });
+        setManualMemberExpenses(manualMember);
         calculateShare({
             mode,
             individual: {
@@ -79,6 +90,7 @@ function AddExpense({
                 share: parseFloat(e.target.value),
             },
             newMemberExpenses,
+            manualMember,
         });
     };
 
@@ -116,8 +128,9 @@ function AddExpense({
     const calculateShare = ({
         total,
         individual,
-        newMemberExpenses,
         mode = 'auto',
+        newMemberExpenses,
+        manualMember,
     }: CalculateShareParams) => {
         if (mode !== 'auto') return;
         if (!total && !individual) return;
@@ -133,23 +146,9 @@ function AddExpense({
         }
 
         if (individual) {
-            if (!newMemberExpenses) return;
-
-            // Mark as manual expense
-            setManualMemberExpenses((prev) =>
-                prev.map((manual) => {
-                    if (manual.id === individual.id) {
-                        return {
-                            id: individual.id,
-                            state: true,
-                        };
-                    }
-                    return manual;
-                })
-            );
-
+            if (!manualMember || !newMemberExpenses) return;
             // Divide the total (amount) remaining amount equally where manual expense is false
-            const manualExpIds = manualMemberExpenses
+            const manualExpIds = manualMember
                 .filter((member) => member.state)
                 .map((member) => member.id);
             const totalManualAmount = manualExpIds.reduce((acc, id) => {
@@ -161,6 +160,8 @@ function AddExpense({
             const remainingAmount = Number(amount) - totalManualAmount;
             const equalShare =
                 remainingAmount / (groupMembers.length - manualExpIds.length);
+
+            console.log('manualExpIds', manualExpIds, newMemberExpenses);
 
             setMemberExpenses((prev) =>
                 prev.map((member) => {
@@ -279,7 +280,7 @@ function AddExpense({
                                 value={
                                     memberExpenses.find(
                                         (exp) => exp.id === member.id
-                                    )?.share
+                                    )?.share || '0'
                                 }
                                 onChange={(e) =>
                                     handleAmountChange(e, member.id)
