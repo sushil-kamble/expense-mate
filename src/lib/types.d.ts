@@ -1,3 +1,5 @@
+import exp from 'constants';
+
 export type PersonalTransaction = {
     id: string;
     category: string;
@@ -32,4 +34,10 @@ export type GroupTransaction = {
         id: string;
         name: string;
     };
+};
+
+export type GroupMember = {
+    id: string;
+    name: string;
+    isDeleted: boolean;
 };

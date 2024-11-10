@@ -9,6 +9,7 @@ import {
 } from '@/db/schema/groupExpense';
 import { createUserContext } from './auth';
 import { revalidatePath } from 'next/cache';
+import { eq } from 'drizzle-orm';
 
 export async function addGroup(groupName: string, groupMembers: string[]) {
     try {
@@ -138,4 +139,36 @@ export const getGroupTransactions = async ({
         where: (expenses, { eq }) => eq(expenses.groupId, groupId),
     });
     return transactions;
+};
+
+export const handleGroupMemberEdit = async (
+    id: string,
+    newName: string,
+    groupId: string,
+    groupName: string
+) => {
+    await db.update(members).set({ name: newName }).where(eq(members.id, id));
+    revalidatePath(
+        `/project/group-expenses/${encodeURIComponent(groupName)}-$-${groupId}`
+    );
+};
+
+export const handleGroupMemberRemovalToggle = async (
+    id: string,
+    groupId: string,
+    groupName: string
+) => {
+    const member = await db
+        .select({ isDeleted: members.isDeleted })
+        .from(members)
+        .where(eq(members.id, id));
+
+    await db
+        .update(members)
+        .set({ isDeleted: !member[0].isDeleted })
+        .where(eq(members.id, id));
+
+    revalidatePath(
+        `/project/group-expenses/${encodeURIComponent(groupName)}-$-${groupId}`
+    );
 };

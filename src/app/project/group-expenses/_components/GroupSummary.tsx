@@ -2,14 +2,16 @@ import { GroupTransaction } from '@/lib/types';
 import React from 'react';
 import GroupSettlementCalculator from '../group-calculations';
 import AmountPill from '@/components/AmountPill';
-import { ChevronRight, Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ChevronRight } from 'lucide-react';
 import Amount from '@/components/Amount';
+import ManageGroupWrapper from './ManageGroupWrapper';
 
 function GroupSummary({
+    groupId,
     transactions,
     groupName,
 }: {
+    groupId: string;
     transactions: GroupTransaction[];
     groupName: string;
 }) {
@@ -67,10 +69,7 @@ function GroupSummary({
                 ))}
             </div>
             <div className="mt-2">
-                <Button variant={'outline'}>
-                    <Settings size={16} />
-                    Manage Group
-                </Button>
+                <ManageGroupWrapper groupName={groupName} groupId={groupId} />
             </div>
         </div>
     );
