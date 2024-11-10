@@ -22,6 +22,14 @@ type MembersExpense = {
     share: string;
 };
 
+type Mode = 'auto' | 'manual';
+
+interface CalculateShareParams {
+    total?: number;
+    individual?: { id: string; share: number };
+    newMemberExpenses?: MembersExpense[];
+}
+
 function AddExpense({
     groupId,
     groupMembers,
@@ -36,28 +44,121 @@ function AddExpense({
     const [memberExpenses, setMemberExpenses] = useState<MembersExpense[]>(
         groupMembers.map((member) => ({ id: member.id, share: '' }))
     );
+    const [mode, setMode] = useState<Mode>('auto');
+    const [manualMemberExpenses, setManualMemberExpenses] = useState<
+        { id: string; state: boolean }[]
+    >(groupMembers.map((member) => ({ id: member.id, state: false })));
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = useState<boolean>(false);
+
     const { toast } = useToast();
 
     const handleAmountChange = (
         e: React.ChangeEvent<HTMLInputElement>,
         id: string
     ) => {
+        const newShare = Math.max(
+            0,
+            Math.min(Number(e.target.value), Number(amount))
+        );
         const newMemberExpenses = memberExpenses.map((member) => {
             if (member.id === id) {
                 return {
                     id,
-                    share: e.target.value,
+                    share: newShare.toString(),
                 };
             }
             return member;
         });
-        setMemberExpenses(newMemberExpenses);
+        setMemberExpenses((prev) => newMemberExpenses);
+        calculateShare({
+            individual: {
+                id,
+                share: parseFloat(e.target.value),
+            },
+            newMemberExpenses,
+        });
     };
 
     const handlePayerChange = (value: string) => {
         setPayer(value);
+    };
+
+    const handleTotalAmountChange = (
+        evt: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setAmount(evt.target.value);
+        calculateShare({ total: parseFloat(evt.target.value) });
+    };
+
+    const calculateShare = ({
+        total,
+        individual,
+        newMemberExpenses,
+    }: CalculateShareParams) => {
+        if (mode !== 'auto') return;
+        if (!total && !individual) return;
+        if (total) {
+            const equalShare = total / groupMembers.length;
+            setMemberExpenses(
+                groupMembers.map((member) => ({
+                    id: member.id,
+                    share: equalShare.toFixed(2),
+                }))
+            );
+            return;
+        }
+
+        if (individual) {
+            if (!newMemberExpenses) return;
+
+            // Mark as manual expense
+            setManualMemberExpenses((prev) =>
+                prev.map((manual) => {
+                    if (manual.id === individual.id) {
+                        return {
+                            id: individual.id,
+                            state: true,
+                        };
+                    }
+                    return manual;
+                })
+            );
+
+            // Divide the total (amount) remaining amount equally where manual expense is false
+            const manualExpIds = manualMemberExpenses
+                .filter((member) => member.state)
+                .map((member) => member.id);
+            const totalManualAmount = manualExpIds.reduce((acc, id) => {
+                const member = newMemberExpenses.find(
+                    (member) => member.id === id
+                );
+                return acc + Number(member?.share);
+            }, 0);
+            const remainingAmount = Number(amount) - totalManualAmount;
+            const equalShare =
+                remainingAmount / (groupMembers.length - manualExpIds.length);
+
+            setMemberExpenses((prev) =>
+                prev.map((member) => {
+                    if (member.id === individual.id) {
+                        return {
+                            id: member.id,
+                            share: isNaN(individual.share)
+                                ? ''
+                                : individual.share.toString(),
+                        };
+                    }
+                    if (manualExpIds.includes(member.id)) {
+                        return member;
+                    }
+                    return {
+                        id: member.id,
+                        share: equalShare.toFixed(2),
+                    };
+                })
+            );
+        }
     };
 
     const handleAddExpense = async () => {
@@ -101,18 +202,23 @@ function AddExpense({
                     <DialogTitle>Add Transaction</DialogTitle>
                 </DialogHeader>
                 <Input
-                    onChange={(e) => setAmount(e.target.value)}
+                    onChange={handleTotalAmountChange}
                     placeholder="Enter Amount"
                     tabIndex={0}
                     type="number"
                 />
                 <div className="flex justify-end">
-                    <ToggleGroup type="single">
-                        <ToggleGroupItem value="bold" aria-label="Toggle bold">
+                    <ToggleGroup
+                        type="single"
+                        value={mode}
+                        variant={'outline'}
+                        onValueChange={(val: Mode) => setMode(val)}
+                    >
+                        <ToggleGroupItem value="auto" aria-label="Toggle bold">
                             Auto Mode
                         </ToggleGroupItem>
                         <ToggleGroupItem
-                            value="italic"
+                            value="manual"
                             aria-label="Toggle italic"
                         >
                             Manual Split
@@ -144,6 +250,14 @@ function AddExpense({
                             <Input
                                 placeholder="Enter Amount"
                                 tabIndex={0}
+                                type="number"
+                                min={0}
+                                max={Number(amount)}
+                                value={
+                                    memberExpenses.find(
+                                        (exp) => exp.id === member.id
+                                    )?.share
+                                }
                                 onChange={(e) =>
                                     handleAmountChange(e, member.id)
                                 }
