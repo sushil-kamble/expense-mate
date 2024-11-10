@@ -25,6 +25,7 @@ type MembersExpense = {
 type Mode = 'auto' | 'manual';
 
 interface CalculateShareParams {
+    mode?: Mode;
     total?: number;
     individual?: { id: string; share: number };
     newMemberExpenses?: MembersExpense[];
@@ -72,6 +73,7 @@ function AddExpense({
         });
         setMemberExpenses((prev) => newMemberExpenses);
         calculateShare({
+            mode,
             individual: {
                 id,
                 share: parseFloat(e.target.value),
@@ -84,17 +86,38 @@ function AddExpense({
         setPayer(value);
     };
 
+    const handleModeChange = (val: Mode) => {
+        setMode(val);
+        if (val === 'auto') {
+            setManualMemberExpenses((prev) =>
+                prev.map((manual) => ({
+                    id: manual.id,
+                    state: false,
+                }))
+            );
+            calculateShare({ mode: val, total: parseFloat(amount) });
+        } else {
+            setManualMemberExpenses((prev) =>
+                prev.map((manual) => ({
+                    id: manual.id,
+                    state: true,
+                }))
+            );
+        }
+    };
+
     const handleTotalAmountChange = (
         evt: React.ChangeEvent<HTMLInputElement>
     ) => {
         setAmount(evt.target.value);
-        calculateShare({ total: parseFloat(evt.target.value) });
+        calculateShare({ mode, total: parseFloat(evt.target.value) });
     };
 
     const calculateShare = ({
         total,
         individual,
         newMemberExpenses,
+        mode = 'auto',
     }: CalculateShareParams) => {
         if (mode !== 'auto') return;
         if (!total && !individual) return;
@@ -212,7 +235,7 @@ function AddExpense({
                         type="single"
                         value={mode}
                         variant={'outline'}
-                        onValueChange={(val: Mode) => setMode(val)}
+                        onValueChange={(val: Mode) => handleModeChange(val)}
                     >
                         <ToggleGroupItem value="auto" aria-label="Toggle bold">
                             Auto Mode
