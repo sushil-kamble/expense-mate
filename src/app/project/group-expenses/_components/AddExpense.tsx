@@ -161,8 +161,6 @@ function AddExpense({
             const equalShare =
                 remainingAmount / (groupMembers.length - manualExpIds.length);
 
-            console.log('manualExpIds', manualExpIds, newMemberExpenses);
-
             setMemberExpenses((prev) =>
                 prev.map((member) => {
                     if (member.id === individual.id) {

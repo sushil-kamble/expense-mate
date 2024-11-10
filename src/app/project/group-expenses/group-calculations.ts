@@ -1,7 +1,7 @@
 /**
  * Represents a group member's transaction details
  */
-interface MemberBalance {
+export interface MemberBalance {
     memberId: string;
     name: string;
     amount: number; // Net amount (positive means to receive, negative means to pay)
@@ -10,7 +10,7 @@ interface MemberBalance {
 /**
  * Represents a settlement transaction between two members
  */
-interface Settlement {
+export interface Settlement {
     from: {
         id: string;
         name: string;
