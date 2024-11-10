@@ -185,7 +185,7 @@ function AddExpense({
 
     const handleAddExpense = async () => {
         setLoading(true);
-        await addExpense({
+        const { status, message } = await addExpense({
             groupId,
             groupName,
             amount,
@@ -196,7 +196,8 @@ function AddExpense({
         });
         setLoading(false);
         toast({
-            title: 'Expense Added Successfully',
+            title: message,
+            className: status ? 'bg-credit' : 'bg-debit',
         });
         reset();
         setOpen(false);
@@ -204,9 +205,13 @@ function AddExpense({
 
     const reset = () => {
         setAmount('');
+        setMode('auto');
         setPayer('');
         setMemberExpenses(
             groupMembers.map((member) => ({ id: member.id, share: '' }))
+        );
+        setManualMemberExpenses(
+            groupMembers.map((member) => ({ id: member.id, state: false }))
         );
     };
 

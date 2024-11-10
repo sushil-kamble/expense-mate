@@ -76,6 +76,16 @@ export const addExpense = async ({
     members: MembersExpense[];
 }) => {
     try {
+        const totalShare = members.reduce(
+            (acc, member) => acc + parseFloat(member.share),
+            0
+        );
+        const amountFloat = parseFloat(amount);
+
+        if (Math.abs(totalShare - amountFloat) > 0.01) {
+            return { status: false, message: 'Invalid share amount' };
+        }
+
         const expense = await db
             .insert(expenses)
             .values({
@@ -87,17 +97,23 @@ export const addExpense = async ({
             })
             .returning({ id: expenses.id });
         const expenseId = expense[0].id;
-        const expensesMembersData = members.map((member) => ({
-            expenseId,
-            memberId: member.id,
-            amount: member.share,
-        }));
+
+        const expensesMembersData = members
+            .filter((member) => parseFloat(member.share) > 0)
+            .map((member) => ({
+                expenseId,
+                memberId: member.id,
+                amount: member.share,
+            }));
+
         await db.insert(expensesMembers).values(expensesMembersData);
         revalidatePath(
             `/project/group-expenses/${encodeURIComponent(groupName)}-$-${groupId}`
         );
+        return { status: true, message: 'Expense added successfully' };
     } catch (error) {
         console.log(error);
+        return { status: false, message: 'Something went wrong' };
     }
 };
 
