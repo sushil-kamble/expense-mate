@@ -1,7 +1,6 @@
 import { GroupTransaction } from '@/lib/types';
 import GroupSettlementCalculator from '../group-calculations';
 import AmountPill from '@/components/AmountPill';
-import { ChevronRight } from 'lucide-react';
 import Amount from '@/components/Amount';
 import ManageGroupWrapper from './ManageGroupWrapper';
 import Settlement from './Settlement';
@@ -41,7 +40,7 @@ function GroupSummary({
                 </div>
 
                 <div className="col-span-3 px-4 ">
-                    <table className="text-center table-auto w-full">
+                    <table className="text-center table-fixed w-full">
                         <thead>
                             <tr className="text-sm pb-4">
                                 <th>From</th>
@@ -52,7 +51,12 @@ function GroupSummary({
                         </thead>
                         <tbody>
                             {settlements.settlements.map((settlement, idx) => (
-                                <Settlement key={idx} settlement={settlement} />
+                                <Settlement
+                                    groupId={groupId}
+                                    groupName={groupName}
+                                    key={idx}
+                                    settlement={settlement}
+                                />
                             ))}
                         </tbody>
                     </table>

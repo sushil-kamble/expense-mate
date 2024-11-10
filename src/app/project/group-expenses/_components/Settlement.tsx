@@ -1,21 +1,35 @@
 'use client';
-import { ChevronRight } from 'lucide-react';
 import React, { useState } from 'react';
 import type { Settlement } from '../group-calculations';
 import Amount from '@/components/Amount';
 import { Button } from '@/components/ui/button';
+import { addExpense } from '@/app/actions/groupExpense';
 
-function Settlement({ settlement }: { settlement: Settlement }) {
+function Settlement({
+    settlement,
+    groupId,
+    groupName,
+}: {
+    settlement: Settlement;
+    groupId: string;
+    groupName: string;
+}) {
     const [loading, setLoading] = useState(false);
 
     const handleSettle = async () => {
         setLoading(true);
-        try {
-            // Add settlement logic here
-            await new Promise((resolve) => setTimeout(resolve, 1000)); // Remove this line when adding real logic
-        } finally {
-            setLoading(false);
-        }
+        await addExpense({
+            groupId,
+            groupName,
+            payerId: settlement.from.id,
+            amount: settlement.amount.toString(),
+            members: [
+                { id: settlement.to.id, share: settlement.amount.toString() },
+            ],
+            date: new Date(),
+            note: 'Settlement',
+        });
+        setLoading(false);
     };
 
     return (
