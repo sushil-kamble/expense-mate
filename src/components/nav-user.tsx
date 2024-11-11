@@ -17,6 +17,8 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from '@/components/ui/sidebar';
+import { useClerk } from '@clerk/nextjs';
+import { Button } from './ui/button';
 
 export function NavUser({
     name,
@@ -28,6 +30,7 @@ export function NavUser({
     avatar: string;
 }) {
     const { isMobile } = useSidebar();
+    const { signOut } = useClerk();
 
     return (
         <SidebarMenu>
@@ -81,8 +84,15 @@ export function NavUser({
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
-                            <LogOut />
-                            Log out
+                            <Button
+                                onClick={() => signOut({ redirectUrl: '/' })}
+                                variant={'ghost'}
+                                size={'sm'}
+                                className="w-full !justify-start !px-0 hover:bg-transparent"
+                            >
+                                <LogOut />
+                                Log out
+                            </Button>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
