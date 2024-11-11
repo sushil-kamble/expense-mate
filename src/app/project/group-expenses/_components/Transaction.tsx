@@ -1,13 +1,13 @@
 import AmountPill from '@/components/AmountPill';
+import { Button } from '@/components/ui/button';
 import { GroupTransaction } from '@/lib/types';
-import React from 'react';
 
 function Transaction({ transaction }: { transaction: GroupTransaction }) {
     return (
-        <div className="grid grid-cols-6 border px-4 py-2 rounded-md">
-            <div className="col-span-1">{transaction.payer.name}</div>
-            <div className="col-span-1">{transaction.amount}</div>
-            <div className="flex gap-2 items-center col-span-4 overflow-x-auto no-scrollbar">
+        <tr>
+            <td>{transaction.payer.name}</td>
+            <td>{transaction.amount}</td>
+            <td className="flex gap-2 overflow-x-auto no-scrollbar">
                 {transaction.members.map((member) => (
                     <AmountPill
                         key={member.id}
@@ -16,8 +16,16 @@ function Transaction({ transaction }: { transaction: GroupTransaction }) {
                         type="credit"
                     />
                 ))}
-            </div>
-        </div>
+            </td>
+            <td>
+                <Button size={'sm'} variant={'outline'}>
+                    Edit
+                </Button>
+                <Button size={'sm'} variant={'outline'} className="ml-2">
+                    Delete
+                </Button>
+            </td>
+        </tr>
     );
 }
 
