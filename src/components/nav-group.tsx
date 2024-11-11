@@ -8,6 +8,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 
@@ -18,6 +19,7 @@ type Group = {
 };
 
 const NavGroup = ({ title, group }: { title: string; group: Group[] }) => {
+    const { toggleSidebar, isMobile } = useSidebar();
     return (
         <SidebarGroup>
             <SidebarGroupLabel>{title}</SidebarGroupLabel>
@@ -25,7 +27,10 @@ const NavGroup = ({ title, group }: { title: string; group: Group[] }) => {
                 {group.map((item: Group) => (
                     <SidebarMenuItem key={item.name}>
                         <SidebarMenuButton asChild tooltip={item.name}>
-                            <Link href={item.url}>
+                            <Link
+                                href={item.url}
+                                onClick={() => isMobile && toggleSidebar()}
+                            >
                                 <item.icon />
                                 <span>{item.name}</span>
                             </Link>

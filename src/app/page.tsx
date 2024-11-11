@@ -54,12 +54,14 @@ export default function Home() {
     return (
         <div className="container mx-auto my-10 p-5">
             <section className="text-center">
-                <h1 className="text-8xl font-[900] mb-4">Expense Mate</h1>
+                <h1 className="text-xl md:text-8xl font-[900] mb-4">
+                    Expense Mate
+                </h1>
                 <p className="text-lg mb-6">
                     A minimalistic personal expense tracker and a smart group
                     expense splitter built with nextgen technologies
                 </p>
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
                     <Link href={ROUTES.PROJECT.PERSONAL_EXPENSES}>
                         <Button>Personal Expense</Button>
                     </Link>
