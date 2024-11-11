@@ -3,16 +3,10 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/Icon';
 import Link from 'next/link';
 import { ROUTES } from '@/lib/routes';
-import {
-    BanknoteIcon,
-    GroupIcon,
-    LockIcon,
-    MonitorSmartphoneIcon,
-    SunMoonIcon,
-} from 'lucide-react';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 
 export default function Home() {
+    const github = 'https://github.com/sushil-kamble/expense-mate';
     const features = [
         {
             icon: 'lock',
@@ -68,7 +62,11 @@ export default function Home() {
                     <Link href={ROUTES.PROJECT.GROUP_EXPENSES}>
                         <Button>Group Expense</Button>
                     </Link>
-                    <Link href="#">
+                    <Link
+                        href={github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         <Button variant="outline">
                             <GitHubLogoIcon className="h-6 w-6" />
                             View on GitHub
@@ -101,7 +99,11 @@ export default function Home() {
                     free to contribute!
                 </p>
                 <div className="mt-4">
-                    <Link href="#">
+                    <Link
+                        href={github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         <Button variant="outline">
                             <GitHubLogoIcon className="h-6 w-6" />
                             View on GitHub
