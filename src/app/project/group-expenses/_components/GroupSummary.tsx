@@ -16,6 +16,9 @@ function GroupSummary({
 }) {
     const settlements =
         GroupSettlementCalculator.calculateSettlements(transactions);
+    const filteredSettlements = settlements.settlements.filter(
+        (item) => Math.floor(item.amount) !== 0
+    );
 
     return (
         <div className="border px-4 rounded-lg">
@@ -50,7 +53,7 @@ function GroupSummary({
                             </tr>
                         </thead>
                         <tbody>
-                            {settlements.settlements.map((settlement, idx) => (
+                            {filteredSettlements.map((settlement, idx) => (
                                 <Settlement
                                     groupId={groupId}
                                     groupName={groupName}
@@ -58,6 +61,16 @@ function GroupSummary({
                                     settlement={settlement}
                                 />
                             ))}
+                            {filteredSettlements.length === 0 && (
+                                <tr>
+                                    <td
+                                        colSpan={4}
+                                        className="text-sm font-light mt-4"
+                                    >
+                                        No Settlements
+                                    </td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
