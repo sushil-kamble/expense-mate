@@ -15,6 +15,7 @@ function ListTransactions({
                         <th className="md:w-[200px]">Payer</th>
                         <th className="md:w-[100px]">Amount</th>
                         <th className="md:w-full">Members</th>
+                        <th className="md:w-[150px]">Note</th>
                         <th className="md:w-[200px]">Actions</th>
                     </tr>
                 </thead>

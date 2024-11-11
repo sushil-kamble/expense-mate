@@ -1,8 +1,23 @@
+'use client';
+import { handleDeleteTransaction } from '@/app/actions/groupExpense';
 import AmountPill from '@/components/AmountPill';
 import { Button } from '@/components/ui/button';
 import { GroupTransaction } from '@/lib/types';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 function Transaction({ transaction }: { transaction: GroupTransaction }) {
+    const pathname = usePathname();
+    const group = decodeURIComponent(pathname.split('/').at(-1)!)?.split('-$-');
+    const groupId = group[1];
+    const groupName = group[0];
+    const [loading, setLoading] = useState(false);
+    const handleDelete = async () => {
+        setLoading(true);
+        await handleDeleteTransaction(groupName, groupId, transaction.id);
+        setLoading(false);
+    };
+
     return (
         <tr>
             <td>{transaction.payer.name}</td>
@@ -17,12 +32,16 @@ function Transaction({ transaction }: { transaction: GroupTransaction }) {
                     />
                 ))}
             </td>
+            <td className="text-sm font-light">{transaction.note}</td>
             <td>
-                <Button size={'sm'} variant={'outline'}>
-                    Edit
-                </Button>
-                <Button size={'sm'} variant={'outline'} className="ml-2">
-                    Delete
+                <Button
+                    size={'sm'}
+                    variant={'destructive'}
+                    className="ml-2"
+                    onClick={() => handleDelete()}
+                    disabled={loading}
+                >
+                    {loading ? 'Deleting...' : 'Delete'}
                 </Button>
             </td>
         </tr>
