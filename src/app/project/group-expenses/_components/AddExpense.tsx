@@ -15,7 +15,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useToast } from '@/hooks/use-toast';
 import { CheckIcon, PlusIcon } from 'lucide-react';
-import { useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 type MembersExpense = {
     id: string;
@@ -53,7 +53,37 @@ function AddExpense({
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = useState<boolean>(false);
 
+    useEffect(() => {
+        if (!open) reset();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open]);
+
     const { toast } = useToast();
+
+    const submitChecker = useMemo(() => {
+        const messages = [];
+        let state = true;
+        if (!payer) {
+            messages.push('Select a payer');
+            state = false;
+        }
+        if (!amount) {
+            messages.push('Enter amount');
+            state = false;
+        }
+
+        const totalShare = memberExpenses.reduce(
+            (acc, member) => acc + parseFloat(member.share),
+            0
+        );
+
+        if (Math.abs(totalShare - parseFloat(amount)) > 0.01) {
+            messages.push('Individual share does not match total amount');
+            state = false;
+        }
+
+        return { state, messages };
+    }, [payer, amount, memberExpenses]);
 
     const handleAmountChange = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -122,6 +152,14 @@ function AddExpense({
         evt: React.ChangeEvent<HTMLInputElement>
     ) => {
         setAmount(evt.target.value);
+
+        setManualMemberExpenses((prev) =>
+            prev.map((manual) => ({
+                ...manual,
+                state: false,
+            }))
+        );
+
         calculateShare({ mode, total: parseFloat(evt.target.value) });
     };
 
@@ -299,11 +337,19 @@ function AddExpense({
                         variant="default"
                         onClick={handleAddExpense}
                         tabIndex={0}
+                        disabled={!submitChecker.state}
                     >
                         <CheckIcon size={16} />
                         Save
                     </Button>
                 </DialogFooter>
+                <div className="flex flex-col">
+                    {submitChecker.messages.map((message, idx) => (
+                        <p key={idx} className="text-red-500">
+                            {message}
+                        </p>
+                    ))}
+                </div>
             </DialogContent>
         </Dialog>
     );

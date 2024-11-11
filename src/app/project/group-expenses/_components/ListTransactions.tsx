@@ -9,14 +9,14 @@ function ListTransactions({
 }) {
     return (
         <div>
-            <table className="table-fixed text-left w-full">
+            <table className="table-fixed text-left w-full text-xs lg:text-base">
                 <thead>
-                    <tr className="[&>*]:text-sm [&>*]:font-medium">
-                        <th className="md:w-[200px]">Payer</th>
-                        <th className="md:w-[100px]">Amount</th>
-                        <th className="md:w-full">Members</th>
-                        <th className="md:w-[150px]">Note</th>
-                        <th className="md:w-[200px]">Actions</th>
+                    <tr className="[&>*]:text-xs [&>*]:lg:text-sm [&>*]:font-medium">
+                        <th className="lg:w-[200px]">Payer</th>
+                        <th className="lg:w-[100px]">Amount</th>
+                        <th className="lg:w-full">Members</th>
+                        <th className="lg:w-[150px]">Note</th>
+                        <th className="lg:w-[200px]">Actions</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -32,12 +32,13 @@ function Transaction({ transaction }: { transaction: GroupTransaction }) {
                     />
                 ))}
             </td>
-            <td className="text-sm font-light">{transaction.note}</td>
+            <td className="text-xs lg:text-sm font-light">
+                {transaction.note}
+            </td>
             <td>
                 <Button
                     size={'sm'}
                     variant={'destructive'}
-                    className="ml-2"
                     onClick={() => handleDelete()}
                     disabled={loading}
                 >

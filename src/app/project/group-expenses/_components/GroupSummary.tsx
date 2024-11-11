@@ -19,8 +19,8 @@ function GroupSummary({
 
     return (
         <div className="border px-4 rounded-lg">
-            <div className="grid grid-cols-6">
-                <div className="w-full col-span-1 border-r pr-2 pt-2">
+            <div className="grid grid-cols-1 lg:grid-cols-6 pb-2 gap-y-2 lg:gap-y-0">
+                <div className="w-full col-span-1 lg:border-r lg:pr-2 pt-2">
                     <h2
                         className="text-lg font-light line-clamp-1"
                         title={groupName}
@@ -61,7 +61,7 @@ function GroupSummary({
                         </tbody>
                     </table>
                 </div>
-                <div className="col-span-2 border-l pl-2 pt-2">
+                <div className="col-span-2 lg:border-l lg:pl-2 pt-2">
                     <h2 className="text-lg font-light line-clamp-1">
                         Total Settlements
                     </h2>
