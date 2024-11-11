@@ -33,7 +33,7 @@ function Settlement({
     };
 
     return (
-        <tr className="hover:bg-slate-50 py-1">
+        <tr>
             <td className="text-sm font-medium">{settlement.from.name}</td>
             <td className="text-sm font-medium">{settlement.to.name}</td>
             <td>

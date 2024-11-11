@@ -9,7 +9,7 @@ import { SidebarTrigger } from './ui/sidebar';
 
 const Header = () => {
     return (
-        <div className="border-b flex items-center sticky top-0 z-10 h-16 px-4 md:px-0">
+        <div className="border-b flex items-center sticky top-0 z-10 h-16 px-4 md:px-0 bg-background">
             <div className="flex justify-between items-center w-full ml-2 mr-6">
                 <div className="flex items-center gap-4">
                     <SidebarTrigger />
