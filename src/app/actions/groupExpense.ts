@@ -80,9 +80,10 @@ export const addExpense = async ({
             (acc, member) => acc + parseFloat(member.share),
             0
         );
-        const amountFloat = parseFloat(amount);
+        const totalShareRounded =
+            Math.round((totalShare + Number.EPSILON) * 100) / 100;
 
-        if (Math.abs(totalShare - amountFloat) > 0.01) {
+        if (Math.abs(totalShareRounded - Number(amount)) > 0.1) {
             return { status: false, message: 'Invalid share amount' };
         }
 

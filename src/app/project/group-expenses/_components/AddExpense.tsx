@@ -42,6 +42,7 @@ function AddExpense({
     groupMembers: { id: string; name: string }[];
 }) {
     const [amount, setAmount] = useState<string>('');
+    const [note, setNote] = useState<string>('');
     const [payer, setPayer] = useState<string>('');
     const [memberExpenses, setMemberExpenses] = useState<MembersExpense[]>(
         groupMembers.map((member) => ({ id: member.id, share: '' }))
@@ -76,8 +77,10 @@ function AddExpense({
             (acc, member) => acc + parseFloat(member.share),
             0
         );
+        const totalShareRounded =
+            Math.round((totalShare + Number.EPSILON) * 100) / 100;
 
-        if (Math.abs(totalShare - parseFloat(amount)) > 0.01) {
+        if (Math.abs(totalShare - totalShareRounded) > 0.01) {
             messages.push('Individual share does not match total amount');
             state = false;
         }
@@ -230,7 +233,7 @@ function AddExpense({
             date: new Date(),
             payerId: payer,
             members: memberExpenses,
-            note: 'Expense added',
+            note,
         });
         setLoading(false);
         toast({
@@ -245,6 +248,7 @@ function AddExpense({
         setAmount('');
         setMode('auto');
         setPayer('');
+        setNote('');
         setMemberExpenses(
             groupMembers.map((member) => ({ id: member.id, share: '' }))
         );
@@ -331,7 +335,22 @@ function AddExpense({
                     ))}
                 </RadioGroup>
 
-                <DialogFooter className="sm:justify-start mt-2">
+                <Input
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    placeholder="Note"
+                    tabIndex={0}
+                />
+
+                <div className="flex flex-col">
+                    {submitChecker.messages.map((message, idx) => (
+                        <p key={idx} className="text-destructive text-sm">
+                            {message}
+                        </p>
+                    ))}
+                </div>
+
+                <DialogFooter className="sm:justify-start">
                     <Button
                         loading={loading}
                         variant="default"
@@ -343,13 +362,6 @@ function AddExpense({
                         Save
                     </Button>
                 </DialogFooter>
-                <div className="flex flex-col">
-                    {submitChecker.messages.map((message, idx) => (
-                        <p key={idx} className="text-red-500">
-                            {message}
-                        </p>
-                    ))}
-                </div>
             </DialogContent>
         </Dialog>
     );
