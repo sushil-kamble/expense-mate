@@ -69,7 +69,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         variants={variants}
                         transition={{ duration: 0.5 }}
                     >
-                        {open ? 'Sassy Sass' : ''}
+                        {open ? 'ExpenseMate' : ''}
                     </motion.span>
                 </h2>
             </SidebarHeader>

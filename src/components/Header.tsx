@@ -16,9 +16,9 @@ const Header = () => {
                     <Link href="/" className="flex gap-2 items-center">
                         <LayersIcon className="h-8 w-8" />
                         <div>
-                            <h2 className="text-xl font-bold">Sassy Saas</h2>
+                            <h2 className="text-xl font-bold">ExpenseMate</h2>
                             <p className="text-[10px]">
-                                A template for you future saas
+                                A minimalistic group & personal expense tracker
                             </p>
                         </div>
                     </Link>
