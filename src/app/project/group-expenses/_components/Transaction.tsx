@@ -19,7 +19,7 @@ function Transaction({ transaction }: { transaction: GroupTransaction }) {
     };
 
     return (
-        <tr>
+        <tr className="hover:bg-secondary">
             <td>{transaction.payer.name}</td>
             <td>{transaction.amount}</td>
             <td className="flex items-center gap-2 overflow-x-auto no-scrollbar">
