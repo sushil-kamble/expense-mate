@@ -42,6 +42,13 @@ function AddGroup() {
     };
 
     const handleAddGroup = async () => {
+        if (!groupName.trim() || members.some((member) => !member.trim())) {
+            toast({
+                title: 'Group name and members cannot be empty',
+            });
+            return;
+        }
+
         setLoading(true);
         await addGroup(groupName, members);
         setLoading(false);
@@ -94,11 +101,6 @@ function AddGroup() {
                                 placeholder={'Name ' + Number(i + 1)}
                                 onChange={(e) => handleMemberChange(e, i)}
                                 tabIndex={0}
-                                ref={
-                                    i === members.length - 1
-                                        ? newInputRef
-                                        : null
-                                }
                             />
                             {i === members.length - 1 && (
                                 <PlusIcon
